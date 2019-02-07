@@ -30,6 +30,7 @@ import android.widget.Toast;
 import com.pedro.encoder.input.video.CameraHelper;
 import com.pedro.encoder.input.video.CameraOpenException;
 import com.pedro.rtplibrary.rtmp.RtmpCamera1;
+import com.pedro.rtplibrary.rtmp.RtmpCameraAdaptive1;
 import com.pedro.rtpstreamer.R;
 
 import java.io.File;
@@ -53,7 +54,7 @@ public class RtmpActivity extends AppCompatActivity
 
   private Integer[] orientations = new Integer[] { 0, 90, 180, 270 };
 
-  private RtmpCamera1 rtmpCamera1;
+  private RtmpCameraAdaptive1 rtmpCamera1;
   private Button bStartStop, bRecord;
   private EditText etUrl;
   private String currentDateAndTime = "";
@@ -81,7 +82,7 @@ public class RtmpActivity extends AppCompatActivity
     SurfaceView surfaceView = findViewById(R.id.surfaceView);
     surfaceView.getHolder().addCallback(this);
     surfaceView.setOnTouchListener(this);
-    rtmpCamera1 = new RtmpCamera1(surfaceView, this);
+    rtmpCamera1 = new RtmpCameraAdaptive1(surfaceView, this);
     prepareOptionsMenuViews();
 
     etUrl = findViewById(R.id.et_rtp_url);
@@ -225,7 +226,7 @@ public class RtmpActivity extends AppCompatActivity
             rtmpCamera1.setAuthorization(user, password);
           }
           if (rtmpCamera1.isRecording() || prepareEncoders()) {
-            rtmpCamera1.startStream(etUrl.getText().toString());
+            rtmpCamera1.startStream(etUrl.getText().toString().isEmpty()?etUrl.getHint().toString():etUrl.getText().toString());
           } else {
             //If you see this all time when you start stream,
             //it is because your encoder device dont support the configuration

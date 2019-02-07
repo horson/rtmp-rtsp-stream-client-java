@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.pedro.encoder.input.video.CameraOpenException;
+import com.pedro.rtplibrary.rtmp.RtmpCameraAdaptive1;
 import com.pedro.rtpstreamer.R;
 import com.pedro.rtplibrary.rtmp.RtmpCamera1;
 import java.io.File;
@@ -29,7 +30,7 @@ import net.ossrs.rtmp.ConnectCheckerRtmp;
 public class ExampleRtmpActivity extends AppCompatActivity
     implements ConnectCheckerRtmp, View.OnClickListener, SurfaceHolder.Callback {
 
-  private RtmpCamera1 rtmpCamera1;
+    private RtmpCameraAdaptive1 rtmpCamera1;
   private Button button;
   private Button bRecord;
   private EditText etUrl;
@@ -52,7 +53,7 @@ public class ExampleRtmpActivity extends AppCompatActivity
     switchCamera.setOnClickListener(this);
     etUrl = findViewById(R.id.et_rtp_url);
     etUrl.setHint(R.string.hint_rtmp);
-    rtmpCamera1 = new RtmpCamera1(surfaceView, this);
+    rtmpCamera1 = new RtmpCameraAdaptive1(surfaceView, this);
     surfaceView.getHolder().addCallback(this);
   }
 
@@ -117,7 +118,7 @@ public class ExampleRtmpActivity extends AppCompatActivity
           if (rtmpCamera1.isRecording()
               || rtmpCamera1.prepareAudio() && rtmpCamera1.prepareVideo()) {
             button.setText(R.string.stop_button);
-            rtmpCamera1.startStream(etUrl.getText().toString());
+            rtmpCamera1.startStream(etUrl.getText().toString().isEmpty()?etUrl.getHint().toString():etUrl.getText().toString());
           } else {
             Toast.makeText(this, "Error preparing stream, This device cant do it",
                 Toast.LENGTH_SHORT).show();

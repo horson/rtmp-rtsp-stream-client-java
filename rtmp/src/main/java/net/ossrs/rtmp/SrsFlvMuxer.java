@@ -57,7 +57,8 @@ public class SrsFlvMuxer {
   private SrsFlvFrame mAudioSequenceHeader;
   private SrsAllocator mVideoAllocator = new SrsAllocator(VIDEO_ALLOC_SIZE);
   private SrsAllocator mAudioAllocator = new SrsAllocator(AUDIO_ALLOC_SIZE);
-  private BlockingQueue<SrsFlvFrame> mFlvTagCache = new LinkedBlockingQueue<>(30);
+  public static int QCAPACITY = 250;
+  private BlockingQueue<SrsFlvFrame> mFlvTagCache = new LinkedBlockingQueue<>(QCAPACITY);
   private ConnectCheckerRtmp connectCheckerRtmp;
   private int sampleRate = 0;
   private boolean isPpsSpsSend = false;
@@ -71,7 +72,12 @@ public class SrsFlvMuxer {
     publisher = new DefaultRtmpPublisher(connectCheckerRtmp);
   }
 
-  public void setProfileIop(byte profileIop) {
+  public int getFrameCountInQueue() {
+    return mFlvTagCache.size();
+  }
+
+
+    public void setProfileIop(byte profileIop) {
     this.profileIop = profileIop;
   }
 
@@ -872,6 +878,10 @@ public class SrsFlvMuxer {
 
     private void flvFrameCacheAdd(SrsFlvFrame frame) {
       try {
+        if (frame.is_video() && mFlvTagCache.remainingCapacity()<QCAPACITY/5) {
+          return;
+        }
+
         mFlvTagCache.add(frame);
       } catch (IllegalStateException e) {
         Log.i(TAG, "frame discarded");

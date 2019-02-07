@@ -22,7 +22,7 @@ import net.ossrs.rtmp.SrsFlvMuxer;
 
 public class RtmpCamera1 extends Camera1Base {
 
-  private SrsFlvMuxer srsFlvMuxer;
+  protected SrsFlvMuxer srsFlvMuxer;
 
   public RtmpCamera1(SurfaceView surfaceView, ConnectCheckerRtmp connectChecker) {
     super(surfaceView);
