@@ -192,7 +192,7 @@ public abstract class Camera1Base
    */
   public boolean prepareVideo(int width, int height, int fps, int bitrate, boolean hardwareRotation,
       int rotation) {
-    return prepareVideo(width, height, fps, bitrate, hardwareRotation, 2, rotation);
+    return prepareVideo(width, height, fps, bitrate, hardwareRotation, 1, rotation);
   }
 
   protected abstract void prepareAudioRtp(boolean isStereo, int sampleRate);
